@@ -1,0 +1,149 @@
+// scripts.js
+document.addEventListener('DOMContentLoaded', () => {
+    const cars = [
+        { id: 1, model: 'Toyota Camry', cost: '25,000 Kz/dia', image: 'https://via.placeholder.com/150' },
+        { id: 2, model: 'Honda Accord', cost: '22,000 Kz/dia', image: 'https://via.placeholder.com/150' },
+        { id: 3, model: 'Tesla Model 3', cost: '35,000 Kz/dia', image: 'https://via.placeholder.com/150' },
+        { id: 4, model: 'BMW 3 Series', cost: '30,000 Kz/dia', image: 'https://via.placeholder.com/150' }
+    ];
+
+    const carList = document.getElementById('car-list');
+    const carSelection = document.getElementById('car-selection');
+    const provinceSelect = document.getElementById('province');
+    const municipalitySelect = document.getElementById('municipality');
+
+    // Função para renderizar a lista de carros
+    const renderCars = () => {
+        carList.innerHTML = '';
+        carSelection.innerHTML = '';
+        cars.forEach(car => {
+            // Adicionar carros à lista de carros
+            const carDiv = document.createElement('div');
+            carDiv.classList.add('car');
+            carDiv.innerHTML = `
+                <img src="${car.image}" alt="${car.model}">
+                <h3>${car.model}</h3>
+                <p>Custo: ${car.cost}</p>
+                <div class="buttons">
+                    <button class="rent-button"><i class="fas fa-car"></i> Alugar</button>
+                    <button class="edit-button"><i class="fas fa-edit"></i></button>
+                    <button class="delete-button"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `;
+            carList.appendChild(carDiv);
+
+            // Adicionar carros ao dropdown de seleção
+            const option = document.createElement('option');
+            option.value = car.id;
+            option.textContent = car.model;
+            carSelection.appendChild(option);
+        });
+
+        // Anexar eventos aos botões de editar e deletar
+        document.querySelectorAll('.edit-button').forEach((button, index) => {
+            button.addEventListener('click', () => editCar(index));
+        });
+
+        document.querySelectorAll('.delete-button').forEach((button, index) => {
+            button.addEventListener('click', () => deleteCar(index));
+        });
+
+        // Anexar evento ao botão de alugar
+        document.querySelectorAll('.rent-button').forEach((button, index) => {
+            button.addEventListener('click', () => rentCar(index));
+        });
+    };
+
+    renderCars();
+
+    // Manter uma lista de municípios com base na província selecionada
+    const municipalities = {
+        luanda: ['Luanda', 'Cazenga', 'Viana', 'Belas'],
+        benguela: ['Benguela', 'Lobito', 'Baía Farta', 'Cubal'],
+        huambo: ['Huambo', 'Caála', 'Londuimbali', 'Ukuma']
+    };
+
+    // Atualizar os municípios quando a província for selecionada
+    provinceSelect.addEventListener('change', (event) => {
+        const selectedProvince = event.target.value;
+        municipalitySelect.innerHTML = '';
+        municipalities[selectedProvince].forEach(municipality => {
+            const option = document.createElement('option');
+            option.value = municipality;
+            option.textContent = municipality;
+            municipalitySelect.appendChild(option);
+        });
+    });
+
+    // Função para adicionar um novo carro
+    document.getElementById('add-car-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const newCar = {
+            id: cars.length + 1,
+            model: event.target['car-model'].value,
+            cost: `${event.target['car-cost'].value} Kz/dia`,
+            image: 'https://via.placeholder.com/150'
+        };
+        cars.push(newCar);
+        renderCars();
+        event.target.reset();
+    });
+
+    // Função para editar um carro
+    const editCar = (index) => {
+        const car = cars[index];
+        const newModel = prompt('Insira o novo modelo do carro:', car.model);
+        const newCost = prompt('Insira o novo custo do aluguel (por dia em Kz):', car.cost.replace(' Kz/dia', ''));
+        if (newModel && newCost) {
+            car.model = newModel;
+            car.cost = `${newCost} Kz/dia`;
+            renderCars();
+        }
+    };
+
+    // Função para deletar um carro
+    const deleteCar = (index) => {
+        if (confirm('Tem certeza de que deseja deletar este carro?')) {
+            cars.splice(index, 1);
+            renderCars();
+        }
+    };
+
+    // Função para alugar um carro
+    const rentCar = (index) => {
+        const car = cars[index];
+        const rentFormHtml = `
+            <div class="rent-form">
+                <h3>Alugar ${car.model}</h3>
+                <form id="rent-form-${car.id}">
+                    <label for="full-name-${car.id}">Nome Completo:</label>
+                    <input type="text" id="full-name-${car.id}" required>
+
+                    <label for="personal-docs-${car.id}">Usar Documentos Pessoais:</label>
+                    <input type="checkbox" id="personal-docs-${car.id}">
+
+                    <label for="payment-method-${car.id}">Escolha o Método de Pagamento:</label>
+                    <select id="payment-method-${car.id}">
+                        <option value="paypal">PayPal</option>
+                        <option value="visa">Visa</option>
+                        <option value="bank">Conta Bancária</option>
+                        <option value="multicaixaexpress">Multicaixa Express</option>
+                    </select>
+
+                    <button type="submit"><i class="fas fa-car"></i> Confirmar Aluguel</button>
+                </form>
+            </div>
+        `;
+        const rentContainer = document.createElement('div');
+        rentContainer.innerHTML = rentFormHtml;
+        document.body.appendChild(rentContainer);
+
+        document.getElementById(`rent-form-${car.id}`).addEventListener('submit', (event) => {
+            event.preventDefault();
+            const fullName = document.getElementById(`full-name-${car.id}`).value;
+            const paymentMethod = document.getElementById(`payment-method-${car.id}`).value;
+            alert(`Você alugou um ${car.model} em nome de ${fullName} e pagou via ${paymentMethod}.`);
+            document.body.removeChild(rentContainer);
+        });
+    };
+});

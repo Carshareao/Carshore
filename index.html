@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarShare - Aluguel de Carros</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>CarShare</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Início</a></li>
+                <li><a href="#cars">Carros</a></li>
+                <li><a href="#rent">Alugar um Carro</a></li>
+                <li><a href="#add-car">Adicionar Carro</a></li>
+                <li><a href="#contact">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home">
+            <h2>Bem-vindo ao CarShare</h2>
+            <p>A sua solução para aluguel de carros em Angola.</p>
+        </section>
+
+        <section id="cars">
+            <h2>Carros Disponíveis</h2>
+            <div id="car-list" class="car-list"></div>
+        </section>
+
+        <section id="rent">
+            <h2>Alugar um Carro</h2>
+            <form id="rent-form">
+                <label for="car-selection">Escolha um Carro:</label>
+                <select id="car-selection"></select>
+
+                <label for="province">Província:</label>
+                <select id="province">
+                    <option value="luanda">Luanda</option>
+                    <option value="benguela">Benguela</option>
+                    <option value="huambo">Huambo</option>
+                    <!-- Adicione outras províncias conforme necessário -->
+                </select>
+
+                <label for="municipality">Município:</label>
+                <select id="municipality">
+                    <!-- Municípios serão preenchidos com base na província selecionada -->
+                </select>
+
+                <label for="personal-docs">Usar Documentos Pessoais:</label>
+                <input type="checkbox" id="personal-docs">
+
+                <label for="payment-method">Escolha o Método de Pagamento:</label>
+                <select id="payment-method">
+                    <option value="paypal">PayPal</option>
+                    <option value="visa">Visa</option>
+                    <option value="bank">Conta Bancária</option>
+                    <option value="multicaixaexpress">Multicaixa Express</option>
+                </select>
+
+                <button type="submit"><i class="fas fa-car"></i> Alugar Carro</button>
+            </form>
+        </section>
+
+        <section id="add-car">
+            <h2>Adicionar um Novo Carro</h2>
+            <form id="add-car-form">
+                <label for="car-model">Modelo do Carro:</label>
+                <input type="text" id="car-model" required>
+
+                <label for="car-cost">Custo do Aluguel (por dia em Kz):</label>
+                <input type="number" id="car-cost" required>
+
+                <button type="submit"><i class="fas fa-plus"></i> Adicionar Carro</button>
+            </form>
+        </section>
+
+        <section id="contact">
+            <h2>Contato</h2>
+            <p>Email: suporte@carshare.com</p>
+            <p>Telefone: +244 923 456 789</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 CarShare. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
